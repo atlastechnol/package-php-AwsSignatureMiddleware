@@ -8,6 +8,10 @@
         {
             "name": "Wizacha",
             "homepage": "http://wizacha.github.io/"
+        },
+        {
+            "name": "Sjoerd Maessen",
+            "homepage": "https://github.com/sjoerdmaessen"
         }
     ],
     "require": {
