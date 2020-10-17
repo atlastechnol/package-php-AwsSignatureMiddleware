@@ -19,7 +19,7 @@
         "aws/aws-sdk-php": "^3.8"
     },
     "autoload": {
-        "psr-4": { "Wizacha\\": "src/" }
+        "psr-4": { "SjoerdMaessen\\": "src/" }
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5"
