@@ -1,5 +1,5 @@
 {
-    "name": "wizacha/aws-signature-middleware",
+    "name": "sjoerdmaessen/aws-signature-middleware",
     "type": "library",
     "description": "Middleware to sign request for AWS API",
     "keywords": ["AWS", "signature", "middleware", "guzzle"],
@@ -15,6 +15,7 @@
         }
     ],
     "require": {
+        "php": "7.4.*",
         "aws/aws-sdk-php": "^3.8"
     },
     "autoload": {
