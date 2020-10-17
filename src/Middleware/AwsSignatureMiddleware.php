@@ -4,7 +4,7 @@
  * @copyright   Copyright (c) Wizacha
  * @license     https://opensource.org/licenses/MIT
  */
-namespace SjoerdMaessen\Middleware;
+namespace Sjoerdmaessen\Middleware;
 
 use Aws\Credentials\CredentialsInterface;
 use Aws\Signature\SignatureInterface;
