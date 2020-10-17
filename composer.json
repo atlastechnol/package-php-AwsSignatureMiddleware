@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sjoerdmaessen\\MachineLearning\\": "src"
+            "Sjoerdmaessen\\Middleware\\": "src"
         }
     },
     "require-dev": {
