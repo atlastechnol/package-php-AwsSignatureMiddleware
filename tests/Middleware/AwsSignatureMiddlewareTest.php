@@ -1,10 +1,10 @@
 <?php
 /**
- * @author      Wizacha DevTeam <dev@wizacha.com>
+ * @author      Sjoerd Maessen, Wizacha DevTeam <dev@wizacha.com>
  * @copyright   Copyright (c) Wizacha
  * @license     https://opensource.org/licenses/MIT
  */
-namespace Wizacha\Middleware;
+namespace SjoerdMaessen\Middleware;
 
 use Aws\Credentials\Credentials;
 use Aws\Signature\SignatureV4;
@@ -70,7 +70,7 @@ class AwsSignatureMiddlewareTest extends TestCase
         ], $result);
     }
 
-    private function generateTestMiddleware() : callable
+    private function generateTestMiddleware() : AwsSignatureMiddleware
     {
         // Mock time Aws\Signature to reproduce same result
         if (!function_exists('Aws\Signature\gmdate')) {
