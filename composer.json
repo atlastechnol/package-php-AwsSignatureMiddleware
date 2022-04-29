@@ -12,6 +12,10 @@
         {
             "name": "Sjoerd Maessen",
             "homepage": "https://github.com/sjoerdmaessen"
+        },
+        {
+            "name": "Atlas Technologies",
+            "homepage": "https://github.com/atlastechnol"
         }
     ],
     "require": {
@@ -19,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sjoerdmaessen\\Middleware\\": "src"
+            "Atlas\\AwsSignatureMiddleware\\": "src"
         }
     },
     "require-dev": {
