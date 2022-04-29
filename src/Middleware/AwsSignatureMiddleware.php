@@ -4,7 +4,7 @@
  * @copyright   Copyright (c) Wizacha
  * @license     https://opensource.org/licenses/MIT
  */
-namespace Sjoerdmaessen\Middleware;
+namespace Atlas\AwsSignatureMiddleware;
 
 use Aws\Credentials\CredentialsInterface;
 use Aws\Signature\SignatureInterface;
