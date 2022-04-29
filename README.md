@@ -1,28 +1,97 @@
-# AwsEsConnection
+# AwsSignatureMiddleware
 Kind of connector to use AWS Elasticsearch Service with elastic/elasticsearch-php client
 
-[![Build Status](https://travis-ci.org/wizacha/AwsSignatureMiddleware.svg?branch=master)](https://travis-ci.org/wizacha/AwsSignatureMiddleware)
-
 ## Installation
-`composer require wizacha/aws-signature-middleware`
+
+Add private repository
+
+```json
+{
+  ...
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:atlastechnol/package-php-AwsSignatureMiddleware.git"
+    }
+  ]
+}
+```
+
+Require this package with composer
+
+```shell
+composer require atlas/aws-signature-middleware -n
+```
 
 ## Usage
-Exemple with elasticsearch client
+Example with elasticsearch client
 
 ```php
 <?php
-$credentials = new \Aws\Credentials\Credentials('id', 'secret');
-$signature = new \Aws\Signature\SignatureV4('es', 'eu-west-1');
 
-$middleware = new \Wizacha\Middleware\AwsSignatureMiddleware($credentials, $signature);
-$defaultHandler = \Elasticsearch\ClientBuilder::defaultHandler();
-$awsHandler = $middleware($defaultHandler);
+namespace App\Providers\Aws;
 
-$clientBuilder =  \Elasticsearch\ClientBuilder::create();
+use Aws\Credentials\CredentialProvider;
+use Aws\Signature\SignatureV4;
+use Atlas\AwsSignatureMiddleware\AwsSignatureMiddleware;
+use App\Services\Aws\Contracts\SearchMetricsServiceContract;
+use App\Services\Aws\SearchService;
+use atlas\LaravelCircuitBreaker\Store\CircuitBreakerStoreInterface;
+use Elasticsearch\ClientBuilder;
+use Illuminate\Support\ServiceProvider;
 
-$clientBuilder
-    ->setHandler($awsHandler)
-    ->setHosts(['endpoint.eu-west-1.es.amazonaws.com:80'])
-;
-$client = $clientBuilder->build();
+class SearchMetricsServiceProvider extends ServiceProvider
+{
+    protected $defer = true;
+
+    /**
+     * Register the application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->bind(
+            SearchMetricsServiceContract::class,
+            function ($app) {
+                return new SearchService(
+                    ClientBuilder::create()
+                        ->setSSLVerification(false)
+                        ->setConnectionPool(config('metrics.elastic.elastic_connection'))
+                        ->setHosts(config('metrics.elastic.elastic_hosts'))
+                        ->setHandler($this->getElasticHandler()),
+                    $app[CircuitBreakerStoreInterface::class]
+                );
+            }
+        );
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides(): array
+    {
+       return [
+           SearchMetricsServiceContract::class
+       ];
+    }
+
+    private function getElasticHandler()
+    {
+        $defaultHandler = ClientBuilder::defaultHandler();
+
+        if (in_array(config('app.env'), ['local', 'testing'])) {
+            return $defaultHandler;
+        }
+
+        $provider = CredentialProvider::defaultProvider();
+        $credentials = $provider()->wait();
+        $signature = new SignatureV4('es', config('metrics.elastic.aws_region'));
+
+        $middleware = new AwsSignatureMiddleware($credentials, $signature);
+        return $middleware($defaultHandler);
+    }
+}
 ```
