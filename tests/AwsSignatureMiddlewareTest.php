@@ -4,7 +4,7 @@
  * @copyright   Copyright (c) Wizacha
  * @license     https://opensource.org/licenses/MIT
  */
-namespace Sjoerdmaessen\Middleware;
+namespace Atlas\AwsSignatureMiddleware;
 
 use Aws\Credentials\Credentials;
 use Aws\Signature\SignatureV4;
@@ -70,7 +70,7 @@ class AwsSignatureMiddlewareTest extends TestCase
         ], $result);
     }
 
-    private function generateTestMiddleware() : AwsSignatureMiddleware
+    private function generateTestMiddleware()
     {
         // Mock time Aws\Signature to reproduce same result
         if (!function_exists('Aws\Signature\gmdate')) {
